@@ -1,4 +1,6 @@
 package objects;
+import function.Main;
+
 import static function.Functions.*;
 
 public class RType extends Instruction{
@@ -19,6 +21,7 @@ public class RType extends Instruction{
         regD = "0000";
         regS = registerConverter(_regS);
         regT = "0000";
+        Main.pc++;
     }
 
     //Commands: cmp
@@ -30,6 +33,7 @@ public class RType extends Instruction{
         regD = "0000";
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
+        Main.pc++;
     }
 
     //Commands: add, sub, and, or, xor, sll
@@ -55,11 +59,16 @@ public class RType extends Instruction{
         regD = registerConverter(_regD);
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
+        Main.pc++;
     }
 
     @Override
     public String getOutput(){
     	// Pretty huh? I don't know of a good way to concat a bunch of strings.
     	return opCode.concat(cond).concat(s).concat(opx).concat(regD).concat(regS).concat(regT);
+    }
+    @Override
+    public int getPcState(){
+        return pcState;
     }
 }

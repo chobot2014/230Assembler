@@ -1,11 +1,14 @@
 package objects;
 
 
+import function.Main;
+
 public class Instruction {
     private String opCode;
     public String output;
     public String hexvalue;
     public int id;
+    public int pcState = Main.pc;
 
     public Instruction(String opCode) {
         this.opCode = opCode;
@@ -28,9 +31,14 @@ public class Instruction {
         return id;
     }
     public String getOpCode() {
+
         return opCode;
     }
     public String getOutput() {
+
         return output;
+    }
+    public int getPcState(){
+        return pcState;
     }
 }

@@ -11,7 +11,7 @@ import objects.JType;
 import objects.RType;
 
 public class Main{
-    public static int pc = 0;
+    public static int pc;
     
     // Might want to change these.
     public final static boolean DEBUG = true;
@@ -19,6 +19,7 @@ public class Main{
     public final static String FILELOCOUT = "MemoryInitialization.mif";
 
     public static void main(String[] args) {
+        pc = 0;
         try {
             System.out.println("Reading File:"+FILELOC);
 			File file = new File(FILELOC);
@@ -65,13 +66,17 @@ public class Main{
             writer.println("DATA_RADIX=HEX;\n");
 
             writer.println("CONTENT BEGIN");
+            instruct.get(0).pcState =0;
             for(i = 0; i<instruct.size(); i++) {
                 if(i != instruct.size()-1) {
-                    System.out.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";");
+                    System.out.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(i).getPcState());
+
                     writer.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";");
-                } else {
+//                }else if(i != instruct.size()-1 && instruct.get(i).getId()!=i) {
+//                    System.out.println("\t" + instruct.get(0).getId() + "\t:" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(0).getPcState());
+                }else {
                     writer.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";");
-                    System.out.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";");
+                    System.out.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";"+ "    PC: "+instruct.get(i).getPcState());
                 }
             }
             writer.println("END;");
@@ -150,6 +155,9 @@ public class Main{
         	//System.out.println("Binary: " + returnedBinary);
         }
         String returnedHex = Integer.toString(returnedDecimal,16);
+        while(returnedHex.length()!=6){
+            returnedHex = "0".concat(returnedHex);
+        }
         Instruction instruct = new Instruction(id, returnedHex);
         return instruct;
     }

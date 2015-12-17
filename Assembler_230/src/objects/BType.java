@@ -21,12 +21,18 @@ public class BType extends Instruction{
         }
         cond = "0000";
         //calculate label
-        int labelDecimal = Main.pc + 1 + Integer.parseInt(_label);
+        Main.pc = Main.pc + Integer.parseInt(_label);
+        int labelDecimal = Main.pc;
         label = String.format("%016d", Integer.parseInt(Integer.toBinaryString(labelDecimal)));
+        Main.pc++;
     }
-
     @Override
     public String getOutput(){
         return opCode.concat(cond).concat(label);
+    }
+
+    @Override
+    public int getPcState(){
+        return pcState;
     }
 }

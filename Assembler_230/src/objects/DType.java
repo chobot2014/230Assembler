@@ -1,4 +1,6 @@
 package objects;
+import function.Main;
+
 import static function.Functions.*;
 
 public class DType extends Instruction{
@@ -17,6 +19,8 @@ public class DType extends Instruction{
         immediate = "0000000";
         regS = "0000";
         regT = "0000";
+        pcState = Main.pc;
+       Main.pc++;
     }
 
     //Commands: lw, sw
@@ -37,6 +41,7 @@ public class DType extends Instruction{
         immediate = "0000000";
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
+        Main.pc++;
     }
 
     //Commands: addi, lw, sw
@@ -52,14 +57,15 @@ public class DType extends Instruction{
             immediate = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_constantVal))));
             regS = registerConverter(_regS);
             regT = registerConverter(_regT);
+            this.pcState = Main.pc;
         }else if(_opCode.equalsIgnoreCase("lw")){
             String offset = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_regT))));
             opCode = "0100";
             cond = "0000";
             s = "0";
             immediate = String.format("%07d",Integer.parseInt(offset));
-            regS = registerConverter(destReg);
-            regT = registerConverter(wRegt);
+            regT = registerConverter(destReg);
+            regS = registerConverter(wRegt);
         }else if(_opCode.equalsIgnoreCase("sw")){
             String offset = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_regT))));
             opCode = "0101";
@@ -69,10 +75,17 @@ public class DType extends Instruction{
             regS = registerConverter(destReg);
             regT = registerConverter(wRegt);
         }
+
+         Main.pc++;
     }
 
     @Override
     public String getOutput(){
         return opCode.concat(cond).concat(s).concat(immediate).concat(regS).concat(regT);
+    }
+
+    @Override
+    public int getPcState(){
+        return pcState;
     }
 }
