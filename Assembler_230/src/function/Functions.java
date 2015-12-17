@@ -8,4 +8,5 @@ public class Functions {
         String binary = Integer.toString(value, 2);
         return String.format("%04d", Integer.parseInt(binary));
     }
+
 }

@@ -24,7 +24,8 @@ public class BType extends Instruction{
         int labelDecimal = Main.pc + 1 + Integer.parseInt(_label);
         label = String.format("%016d", Integer.parseInt(Integer.toBinaryString(labelDecimal)));
     }
-    
+
+    @Override
     public String getOutput(){
         return opCode.concat(cond).concat(label);
     }

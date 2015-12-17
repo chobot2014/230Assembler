@@ -44,11 +44,12 @@ public class DType extends Instruction{
         opCode = "0110";
         cond = "0000";
         s = "0";
-        immediate = "0000000";
+        immediate = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_constantVal))));
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
     }
 
+    @Override
     public String getOutput(){
         return opCode.concat(cond).concat(s).concat(immediate).concat(regS).concat(regT);
     }

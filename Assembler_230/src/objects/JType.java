@@ -32,6 +32,7 @@ public class JType extends Instruction {
         constant = liRegisterTemp.concat(constantTemp);
     }
 
+    @Override
     public String getOutput(){
         return opCode.concat(constant);
     }

@@ -56,7 +56,8 @@ public class RType extends Instruction{
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
     }
-    
+
+    @Override
     public String getOutput(){
     	// Pretty huh? I don't know of a good way to concat a bunch of strings.
     	return opCode.concat(cond).concat(s).concat(opx).concat(regD).concat(regS).concat(regT);

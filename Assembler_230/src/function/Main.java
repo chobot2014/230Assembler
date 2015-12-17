@@ -1,5 +1,8 @@
 package function;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import objects.BType;
 import objects.DType;
@@ -22,29 +25,72 @@ public class Main{
 			FileReader fileReader = new FileReader(file);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			PrintWriter writer = new PrintWriter(FILELOCOUT, "UTF-8");
-			
+			ArrayList<Instruction> instruct = new ArrayList<Instruction>();
+            Instruction currentHex;
 			String line;
-            writer.println("WIDTH=24;");
-            writer.println("DEPTH=1024;\n");
-            writer.println("ADDRESS_RADIX=UNS");
-            writer.println("DATA_RADIX=HEX;\n");
-            writer.println("CONTENT BEGIN;");
-            int i = 0;
-			while ((line = bufferedReader.readLine()) != null ) {
-				if(!(line.charAt(0) == '#')){ // ignoreing comments
-					pc++;
-					String currentHex = instructionConverter(line);
-                    writer.println("    " + i + "   :   " + currentHex + ";");
-                    if(DEBUG){
-				        System.out.println("Command: " + line);
-				        System.out.println("Hex: " + currentHex);
-				        System.out.println("---");
-					}
+            int i = 1;
+            while((line = bufferedReader.readLine()) != null) {
+                String[] sp = line.split(" ");
+                if(sp[0].equalsIgnoreCase("lw")) {
+                    if(sp[2].equalsIgnoreCase("0")){
+                        currentHex = instructionConverter(line, i);
+                        instruct.add(currentHex);
+                        i++;
+                    } else {
+                        currentHex = instructionConverter(line, Integer.parseInt(sp[2]));
+                        instruct.add(currentHex);
+                    }
+                } else {
+                    currentHex = instructionConverter(line, i);
+                    instruct.add(currentHex);
                     i++;
-				}
-			}
-            writer.println("[23..1023]  :   000000");
+                }
+            }
+
+            Collections.sort(instruct, new Comparator<Instruction>() {
+                public int compare(Instruction i1, Instruction i2) {
+                    return Integer.compare(i1.getId(), i2.getId());
+                }
+            });
+
+            Instruction balls = new Instruction(0, "000000");
+            instruct.add(0, balls);
+
+            Instruction dicks = new Instruction(instruct.get(instruct.size()-1).getId()+1, "000000");
+            instruct.add(dicks);
+
+            writer.println("WIDTH=" + (instruct.get(instruct.size()-1).getId() + 1) + ";");
+            writer.println("DEPTH=" + (instruct.get(instruct.size()-1).getId() + 1001 + ";\n"));
+
+            writer.println("ADDRESS_RADIX=UNS;");
+            writer.println("DATA_RADIX=HEX;\n");
+
+            writer.println("CONTENT BEGIN");
+            for(i = 0; i<instruct.size(); i++) {
+                if(i != instruct.size()-1) {
+                    writer.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";");
+                } else {
+                    writer.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";");
+                }
+            }
             writer.println("END;");
+
+//			while ((line = bufferedReader.readLine()) != null ) {
+//				if(!(line.charAt(0) == '#')){ // ignoring comments
+//					pc++;
+//					String currentHex = instructionConverter(line);
+//                    writer.println("    " + i + "   :   " + currentHex + ";");
+//                    if(DEBUG){
+//				        System.out.println("Command: " + line+";");
+//				        System.out.println("Hex: " + currentHex+";");
+//				        System.out.println("---");
+//					}
+//                    i++;
+//				}
+//			}
+
+
+
 			fileReader.close();
 			writer.close();
 		} catch (IOException e) {
@@ -53,7 +99,7 @@ public class Main{
         System.out.println("Done.");
     }
 
-    public static String instructionConverter(String command) {
+    public static Instruction instructionConverter(String command, int id) {
     	command = command.replace(",", ""); // removing any commas
     	Instruction instruction = new Instruction();
         String[] splitCommand = command.split(" ");
@@ -88,7 +134,7 @@ public class Main{
                 break;//si
                 case 3: instruction = new DType(splitCommand[0],splitCommand[1],splitCommand[2]);
                 break;//sw, lw
-                case 4: instruction = new DType(splitCommand[0],splitCommand[1],splitCommand[2],splitCommand[3]);
+                case 4: instruction = new DType(splitCommand[0],splitCommand[2],splitCommand[1],splitCommand[3]);
                 break;//addi
                 }
             break;
@@ -124,6 +170,7 @@ public class Main{
         	System.out.println("Binary: " + returnedBinary);
         }
         String returnedHex = Integer.toString(returnedDecimal,16);
-        return returnedHex;
+        Instruction instruct = new Instruction(id, returnedHex);
+        return instruct;
     }
 }
