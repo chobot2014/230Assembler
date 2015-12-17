@@ -53,11 +53,11 @@ public class Main{
                 }
             });
 
-            Instruction balls = new Instruction(0, "000000");
-            instruct.add(0, balls);
+            Instruction out2 = new Instruction(0, "000000");
+            instruct.add(0, out2);
 
-            Instruction dicks = new Instruction(instruct.get(instruct.size()-1).getId()+1, "000000");
-            instruct.add(dicks);
+            Instruction test1 = new Instruction(instruct.get(instruct.size()-1).getId()+1, "000000");
+            instruct.add(test1);
 
             writer.println("WIDTH=" + (instruct.get(instruct.size()-1).getId() + 1) + ";");
             writer.println("DEPTH=" + (instruct.get(instruct.size()-1).getId() + 1001 + ";\n"));
@@ -67,16 +67,24 @@ public class Main{
 
             writer.println("CONTENT BEGIN");
             instruct.get(0).pcState =0;
+
+            for(i =0;i<instruct.size();i++){
+                if(instruct.get(i).getId()!=i){
+                    instruct.add(i,test1);
+                }
+            }
+
+
             for(i = 0; i<instruct.size(); i++) {
                 if(i != instruct.size()-1) {
-                    System.out.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(i).getPcState());
+                    System.out.println("\t" + i + "\t:\t" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(i).getPcState());
 
-                    writer.println("\t" + instruct.get(i).getId() + "\t:" + instruct.get(i).getHexvalue() + ";");
-//                }else if(i != instruct.size()-1 && instruct.get(i).getId()!=i) {
-//                    System.out.println("\t" + instruct.get(0).getId() + "\t:" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(0).getPcState());
+                    writer.println("\t" + i + "\t:\t" + instruct.get(i).getHexvalue() + ";");
+                }else if(i != instruct.size()-1 && instruct.get(i).getId()!= i) {
+                 System.out.println("\t" + i + "\t:" + instruct.get(i).getHexvalue() + ";" + "   PC: "+instruct.get(0).getPcState());
                 }else {
-                    writer.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";");
-                    System.out.println("\t[" + instruct.get(i).getId() + ".." + (instruct.get(i).getId() + 1000) + "]\t:" + instruct.get(i).getHexvalue() + ";"+ "    PC: "+instruct.get(i).getPcState());
+                    writer.println("\t[" + i + ".." + (instruct.get(i).getId() + 999) + "]\t:\t" + instruct.get(i).getHexvalue() + ";");
+                    System.out.println("\t[" +i + ".." + (instruct.get(i).getId() + 999) + "]\t:" + instruct.get(i).getHexvalue() + ";"+ "    PC: "+instruct.get(i).getPcState());
                 }
             }
             writer.println("END;");
