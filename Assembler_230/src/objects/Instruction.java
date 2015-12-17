@@ -6,6 +6,7 @@ public class Instruction {
     public String output;
     public String hexvalue;
     public int id;
+
     public Instruction(String opCode) {
         this.opCode = opCode;
     }

@@ -39,14 +39,36 @@ public class DType extends Instruction{
         regT = registerConverter(_regT);
     }
 
-    //Commands: addi
-    public DType(String _opCode, String _regS, String _regT, String _constantVal) {
-        opCode = "0110";
-        cond = "0000";
-        s = "0";
-        immediate = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_constantVal))));
-        regS = registerConverter(_regS);
-        regT = registerConverter(_regT);
+    //Commands: addi, lw, sw
+     public DType(String _opCode, String _regS, String _regT, String _constantVal) {
+
+        String destReg = _regS;
+        String wRegt = _constantVal;
+
+        if(_opCode.equalsIgnoreCase("addi")) {
+            opCode = "0110";
+            cond = "0000";
+            s = "0";
+            immediate = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_constantVal))));
+            regS = registerConverter(_regS);
+            regT = registerConverter(_regT);
+        }else if(_opCode.equalsIgnoreCase("lw")){
+            String offset = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_regT))));
+            opCode = "0100";
+            cond = "0000";
+            s = "0";
+            immediate = String.format("%07d",Integer.parseInt(offset));
+            regS = registerConverter(destReg);
+            regT = registerConverter(wRegt);
+        }else if(_opCode.equalsIgnoreCase("sw")){
+            String offset = String.format("%07d", Integer.parseInt(Integer.toBinaryString(Integer.parseInt(_regT))));
+            opCode = "0101";
+            cond = "0000";
+            s = "0";
+            immediate = String.format("%07d",Integer.parseInt(offset));
+            regS = registerConverter(destReg);
+            regT = registerConverter(wRegt);
+        }
     }
 
     @Override

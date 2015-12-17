@@ -20,10 +20,10 @@ public class RType extends Instruction{
         regS = registerConverter(_regS);
         regT = "0000";
     }
-    
+
     //Commands: cmp
     public RType(String _opCode, String _regS, String _regT) {
-    	opCode = "0010";
+        opCode = "0010";
         cond = "0000";
         s = "1";
         opx = "000";
@@ -31,7 +31,7 @@ public class RType extends Instruction{
         regS = registerConverter(_regS);
         regT = registerConverter(_regT);
     }
-    
+
     //Commands: add, sub, and, or, xor, sll
     public RType(String _opCode, String _regD, String _regS, String _regT) { // add, sub, and, or, xor, cmp
         opCode = "0000";
